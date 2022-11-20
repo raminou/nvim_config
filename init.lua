@@ -110,6 +110,57 @@ require('packer').startup(function()
       require('neoclip').setup()
     end,
   }
+
+  use {
+	'LukasPietzschmann/telescope-tabs',
+	requires = { 'nvim-telescope/telescope.nvim' }
+  }
+
+  use {
+    "folke/noice.nvim",
+    config = function()
+      require("noice").setup({
+    lsp = {
+        -- override markdown rendering so that **cmp** and other plugins use **Treesitter**
+        override = {
+        ["vim.lsp.util.convert_input_to_markdown_lines"] = true,
+        ["vim.lsp.util.stylize_markdown"] = true,
+        ["cmp.entry.get_documentation"] = true,
+        },
+    }})
+    end,
+    requires = {
+      -- if you lazy-load any plugin below, make sure to add proper `module="..."` entries
+      "MunifTanjim/nui.nvim",
+      -- OPTIONAL:
+      --   `nvim-notify` is only needed, if you want to use the notification view.
+      --   If not available, we use `mini` as the fallback
+      "rcarriga/nvim-notify",
+    }
+  }
+  use {
+    "folke/trouble.nvim",
+    requires = "kyazdani42/nvim-web-devicons",
+    config = function()
+      require("trouble").setup {
+        -- your configuration comes here
+        -- or leave it empty to use the default settings
+        -- refer to the configuration section below
+      }
+    end
+  }
+
+  use {
+    "folke/todo-comments.nvim",
+    requires = "nvim-lua/plenary.nvim",
+    config = function()
+      require("todo-comments").setup {
+        -- your configuration comes here
+        -- or leave it empty to use the default settings
+        -- refer to the configuration section below
+      }
+    end
+  }
 end)
 
 -- LSP CONFIG
@@ -228,8 +279,8 @@ cmp.setup {
     { name = 'nvim_lsp' },
     { name = 'luasnip' },
     { name = 'path' },
-    { name = 'cmdline' },
-  }, {
+  },
+  {
       { name = 'buffer' },
   }
 }
@@ -753,7 +804,6 @@ require'nvim-tree'.setup { -- BEGIN_DEFAULT_OPTS
   update_cwd = false,
   view = {
     width = 30,
-    height = 30,
     side = "left",
     preserve_window_proportions = false,
     number = false,
@@ -915,3 +965,5 @@ require('neoclip').setup({
 })
 require('telescope').load_extension('neoclip')
 vim.api.nvim_set_keymap('n', 'fc', "<cmd>Telescope neoclip plus<cr>", opts)
+
+vim.api.nvim_set_keymap('n', 'ft', "<cmd>Telescope telescope-tabs list_tabs<cr>", opts)
